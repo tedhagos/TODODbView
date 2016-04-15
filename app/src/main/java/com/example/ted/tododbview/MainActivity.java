@@ -12,6 +12,7 @@ import android.widget.Button;
 import android.widget.CursorAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
@@ -23,6 +24,12 @@ public class MainActivity extends AppCompatActivity {
   * status    : INTEGER
   * task      : VARCHAR
   * timestamp : DATETIME DEFAULT CURRENT_TIMESTAMP
+  *
+  * CREATE IF NOT EXISTS TABLE todo (
+  *           _id INTEGER PRIMARY AUTOINCREMENT,
+  *           task VARCHAR,
+  *           timestamp DEFAULT CURRENT_TIMESTAMP);
+  *
   * */
 
   private final static String DBNAME = "todo.db";
@@ -45,6 +52,18 @@ public class MainActivity extends AppCompatActivity {
       }
     });
 
+    ListView listview = (ListView) findViewById(R.id.listView);
+    assert listview != null;
+    listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+      @Override
+      public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        TextView task  = ((TextView) view.findViewById(R.id.txtTask));
+        String tasktext = task.getText().toString();
+        String message = String.format("Position: %d, Text: %s", position, tasktext );
+        Toast.makeText(getBaseContext(), message, Toast.LENGTH_LONG).show();
+      }
+    });
+
   }
 
 
@@ -62,24 +81,11 @@ public class MainActivity extends AppCompatActivity {
 
     String sqlquery = "SELECT _id,status, task, strftime('%m.%d.%Y') FROM todo ORDER BY timestamp DESC;";
     Cursor cur = sqldb.rawQuery(sqlquery, null);
+
     TodoAdapter adapter = new TodoAdapter(this, cur, false);
 
     ListView listview = (ListView) findViewById(R.id.listView);
     listview.setAdapter(adapter);
   }
 
-  private void handleListEvents() {
-
-    ListView listview = (ListView) findViewById(R.id.listView);
-    assert listview != null;
-    listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-      @Override
-      public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
-        String message = String.format("Position: %i, Text: %s", position, view.);
-        Toast.makeText(getBaseContext(), "", Toast.LENGTH_LONG).show();
-      }
-    });
-
-  }
 }

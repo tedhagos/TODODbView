@@ -21,7 +21,8 @@
     android:gravity="left"
     android:layout_alignParentTop="true"
     android:layout_toEndOf="@+id/txtStatus"
-    android:layout_marginStart="28dp"/>
+    android:layout_marginStart="28dp"
+    />
 
   <TextView
     android:layout_width="wrap_content"
